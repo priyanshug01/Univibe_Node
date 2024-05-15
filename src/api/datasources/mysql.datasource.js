@@ -12,19 +12,19 @@ const dbConfig = {
     default: 'db1',
     db1: {
         uri: env.mysql.URI,
-        name: "univibe",
-        username: "postgres",
-        password: "123456Pg#",
+        name: "u348782370_univibe",
+        username: "u348782370_univibe",
+        password: "Univibe@0000",
         options: {
-            host: 'localhost',
-            dialect: 'postgres',
+            host: '156.67.64.10',
+            dialect: 'mysql',
             // dialectOptions: {
             //     ssl: {
             //         require: true,
             //         rejectUnauthorized: false
             //     }
             // },
-            port: '5432',
+            port: '3306',
             pool: {
                 max: 60,
                 min: 0,
