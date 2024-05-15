@@ -58,6 +58,9 @@ async function createDatabases() {
     user_master.hasOne(college_master, { foreignKey: 'college_id', sourceKey: 'college_id' });
     user_master.hasOne(role_master, { foreignKey: 'role_id', sourceKey: 'role_id' });
 
+    review_master.hasOne(user_master, { foreignKey: 'user_id', sourceKey: 'user_id' });
+    review_master.hasOne(event_master, { foreignKey: 'event_id', sourceKey: 'event_id' });
+
     // condition
     dbModels = {
         db1Conn: db1,

@@ -17,6 +17,8 @@ const {
     getFavouriteList,
     getEventList,
     bookingAdd,
+    reviewAdd,
+    reviewView,
 
 } = require('../../controllers').MasterController;
 
@@ -42,3 +44,5 @@ router.post('/api/v1/master/favouriteAdd', catchErrors(favouriteAdd));
 router.post('/api/v1/master/getFavouriteList', catchErrors(getFavouriteList));
 router.post('/api/v1/master/getEventList', catchErrors(getEventList));
 router.post('/api/v1/master/bookingAdd', catchErrors(bookingAdd));
+router.post('/api/v1/master/reviewAdd', catchErrors(reviewAdd));
+router.post('/api/v1/master/reviewView', catchErrors(reviewView));

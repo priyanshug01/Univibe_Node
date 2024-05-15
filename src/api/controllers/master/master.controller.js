@@ -399,3 +399,59 @@ exports.bookingAdd = async (req, res) => {
         throw error;
     }
 }
+
+/* ************ review Add ************ */
+exports.reviewAdd = async (req, res) => {
+    console.log('\nMasterController.userAdd triggered -->');
+
+    const { review_master, db1Conn } = await getModels();
+    var today_date = moment(new Date()).format("YYYY/MM/DD");
+
+    try {
+            await review_master.create({
+                event_id: req.body.event_id,
+                user_id: req.body.user_id,
+                comment: req.body.comment,
+                review_date: today_date,
+                status: 1,
+            });
+            res.json({ status: 1, message: "Review Added Successfully.", data: {} });
+    }
+    catch (error) {
+        console.log('\nMasterController.userAdd error', error)
+        throw error;
+    }
+}
+
+/* ************ review view ************ */
+exports.reviewView = async (req, res) => {
+    console.log('\nMasterController.userAdd triggered -->');
+
+    const { review_master,event_master,user_master, db1Conn } = await getModels();
+    var today_date = moment(new Date()).format("YYYY/MM/DD");
+
+    try {
+        let list = await review_master.findAll({
+            order: [['review_date', 'ASC']],
+            where: { status: 1 },
+            attributes: ['event_id', 'user_id', 'comment', 'review_date'],
+
+            include: [{
+                model: event_master,
+             //   attributes: ['college_id', 'college_name'],
+            },{
+                model: user_master
+            }]
+        });
+
+        if (list) {
+            res.json({ status: 1, message: "Event List Found", data: list });
+        } else {
+            res.json({ status: 0, message: "Event List not Found!", data: {} });
+        }
+    }
+    catch (error) {
+        console.log('\nMasterController.getEventList error', error)
+        throw error;
+    }
+}
