@@ -155,7 +155,7 @@ exports.getDepartmentMaster = async (req, res) => {
         let list = await department_master.findAll({
             order: [['department_id', 'ASC']],
             where: { status: 1 },
-            attributes: ['department_id', 'department_name', 'department_code'],
+            attributes: ['department_id', 'department_code', 'department_name'],
 
         });
 
@@ -173,25 +173,24 @@ exports.getDepartmentMaster = async (req, res) => {
 /* ************ Get Event Master List ************ */
 exports.getEventMaster = async (req, res) => {
     console.log('\nMasterController.getEventMaster triggered -->');
-    const { event_master, college_master, city_master, state_master, db1Conn } = await getModels();
+    const { event_master, college_master, user_master, department_master, db1Conn } = await getModels();
     console.log(`\n req.body: `, req.body);
     try {
         let list = await event_master.findAll({
-            order: [['event_date', 'ASC']],
+            order: [['registration_start_date', 'ASC']],
             where: { status: 1 },
-            attributes: ['event_id', 'event_name', 'event_desc', 'event_date', 'event_fees', 'event_type'],
+            attributes: ['event_id', 'event_name', 'event_start_date', 'event_fees', 'event_type', 'user_id'],
 
             include: [{
                 model: college_master,
                 attributes: ['college_id', 'college_name'],
-
+            }, {
+                model: user_master,
+                attributes: ['department_id'],
                 include: [{
-                    model: state_master,
-                    attributes: ['state_id', 'state_name']
-                }, {
-                    model: city_master,
-                    attributes: ['city_id', 'city_name']
-                },]
+                    model: department_master,
+                    attributes: ['department_code'],
+                }]
             }]
         });
 
@@ -382,6 +381,7 @@ exports.bookingAdd = async (req, res) => {
         });
         if (list == 0 || list == []) {
             await booking_master.create({
+                team_id: 0,
                 user_id: req.body.user_id,
                 event_id: req.body.event_id,
                 college_id: req.body.college_id,
@@ -408,14 +408,14 @@ exports.reviewAdd = async (req, res) => {
     var today_date = moment(new Date()).format("YYYY/MM/DD");
 
     try {
-            await review_master.create({
-                event_id: req.body.event_id,
-                user_id: req.body.user_id,
-                comment: req.body.comment,
-                review_date: today_date,
-                status: 1,
-            });
-            res.json({ status: 1, message: "Review Added Successfully.", data: {} });
+        await review_master.create({
+            event_id: req.body.event_id,
+            user_id: req.body.user_id,
+            comment: req.body.comment,
+            review_date: today_date,
+            status: 1,
+        });
+        res.json({ status: 1, message: "Review Added Successfully.", data: {} });
     }
     catch (error) {
         console.log('\nMasterController.userAdd error', error)
@@ -425,9 +425,9 @@ exports.reviewAdd = async (req, res) => {
 
 /* ************ review view ************ */
 exports.reviewView = async (req, res) => {
-    console.log('\nMasterController.userAdd triggered -->');
+    console.log('\nMasterController.reviewView triggered -->');
 
-    const { review_master,event_master,user_master, db1Conn } = await getModels();
+    const { review_master, event_master, user_master, db1Conn } = await getModels();
     var today_date = moment(new Date()).format("YYYY/MM/DD");
 
     try {
@@ -438,9 +438,8 @@ exports.reviewView = async (req, res) => {
 
             include: [{
                 model: event_master,
-             //   attributes: ['college_id', 'college_name'],
-            },{
-                model: user_master
+            }, {
+                model: user_master,
             }]
         });
 
@@ -451,7 +450,7 @@ exports.reviewView = async (req, res) => {
         }
     }
     catch (error) {
-        console.log('\nMasterController.getEventList error', error)
+        console.log('\nMasterController.reviewView error', error)
         throw error;
     }
 }

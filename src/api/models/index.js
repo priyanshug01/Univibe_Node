@@ -17,6 +17,7 @@ const review_master_schema = require('./master/review_master');
 const role_master_schema = require('./master/role_master');
 const state_master_schema = require('./master/state_master');
 const user_master_schema = require('./master/user_master');
+const team_master_schema = require('./master/team_master');
 
 let dbModels;
 
@@ -42,6 +43,7 @@ async function createDatabases() {
     const role_master = db1.define('role_master', role_master_schema.schema, role_master_schema.options);
     const state_master = db1.define('state_master', state_master_schema.schema, state_master_schema.options);
     const user_master = db1.define('user_master', user_master_schema.schema, user_master_schema.options);
+    const team_master = db1.define('team_master', team_master_schema.schema, team_master_schema.options);
 
     // Relation
     city_master.hasOne(state_master, { foreignKey: 'state_id', sourceKey: 'state_id' });
@@ -51,6 +53,7 @@ async function createDatabases() {
     college_master.hasOne(city_master, { foreignKey: 'city_id', sourceKey: 'city_id' });
 
     event_master.hasOne(college_master, { foreignKey: 'college_id', sourceKey: 'college_id' });
+    event_master.hasOne(user_master, { foreignKey: 'user_id', sourceKey: 'user_id' });
 
     favourite_master.hasMany(event_master, { foreignKey: 'event_id', sourceKey: 'event_id' });
 
@@ -77,6 +80,7 @@ async function createDatabases() {
         role_master,
         state_master,
         user_master,
+        team_master,
     };
 
     return dbModels;

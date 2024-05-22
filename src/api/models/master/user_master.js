@@ -8,6 +8,9 @@ const user_master_schema = {
             primaryKey: true,
             autoIncrement: true
         },
+        role_id: {
+            type: Sequelize.INTEGER
+        },
         college_id: {
             type: Sequelize.INTEGER
         },
@@ -20,20 +23,17 @@ const user_master_schema = {
         user_email: {
             type: Sequelize.STRING
         },
-        user_contact: {
+        user_password: {
             type: Sequelize.STRING
         },
-        status: {
-            type: Sequelize.INTEGER
+        user_contact: {
+            type: Sequelize.STRING
         },
         created_date: {
             type: Sequelize.DATE
         },
-        role_id: {
+        status: {
             type: Sequelize.INTEGER
-        },
-        user_password: {
-            type: Sequelize.STRING
         },
     },
     options: {

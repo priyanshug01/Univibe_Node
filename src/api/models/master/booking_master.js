@@ -8,6 +8,9 @@ const booking_master_schema = {
             primaryKey: true,
             autoIncrement: true
         },
+        team_id: {
+            type: Sequelize.INTEGER
+        },
         user_id: {
             type: Sequelize.INTEGER
         },

@@ -1,18 +1,24 @@
 const Sequelize = require("sequelize");
 
-const department_master_schema = {
+const team_master_schema = {
     schema: {
         // attributes
-        department_id: {
+        user_id: {
             type: Sequelize.INTEGER,
             primaryKey: true,
             autoIncrement: true
         },
-        department_code: {
+        college_id: {
+            type: Sequelize.INTEGER
+        },
+        team_name: {
             type: Sequelize.STRING
         },
-        department_name: {
-            type: Sequelize.STRING
+        created_by: {
+            type: Sequelize.INTEGER
+        },
+        created_date: {
+            type: Sequelize.DATE
         },
         status: {
             type: Sequelize.INTEGER
@@ -25,4 +31,4 @@ const department_master_schema = {
     }
 }
 
-module.exports = department_master_schema;
+module.exports = team_master_schema;
