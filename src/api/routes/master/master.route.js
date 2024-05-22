@@ -19,6 +19,7 @@ const {
     bookingAdd,
     reviewAdd,
     reviewView,
+    getUserById,
 
 } = require('../../controllers').MasterController;
 
@@ -46,3 +47,4 @@ router.post('/api/v1/master/getEventList', catchErrors(getEventList));
 router.post('/api/v1/master/bookingAdd', catchErrors(bookingAdd));
 router.post('/api/v1/master/reviewAdd', catchErrors(reviewAdd));
 router.post('/api/v1/master/reviewView', catchErrors(reviewView));
+router.post('/api/v1/master/getUserById', catchErrors(getUserById));

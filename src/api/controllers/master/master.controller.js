@@ -454,3 +454,29 @@ exports.reviewView = async (req, res) => {
         throw error;
     }
 }
+/* ************ User By Id ************ */
+exports.getUserById = async (req, res) => {
+    console.log('\nMasterController.getUserById triggered -->');
+
+    const { user_master, db1Conn } = await getModels();
+
+    try {
+        let list = await user_master.findAll({
+            where: {
+                user_id: req.body.user_id,
+            },
+        });
+
+        if (list == 0 || list == []) {
+            res.json({ status: 0, message: "No Such User Exists.", data: {} });
+        }
+        else {
+            res.json({ status: 1, message: "User Found Successfully.", data: { list } });
+
+        }
+    }
+    catch (error) {
+        console.log('\nMasterController.getUserById error', error)
+        throw error;
+    }
+}
