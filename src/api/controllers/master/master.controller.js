@@ -173,25 +173,13 @@ exports.getDepartmentMaster = async (req, res) => {
 /* ************ Get Event Master List ************ */
 exports.getEventMaster = async (req, res) => {
     console.log('\nMasterController.getEventMaster triggered -->');
-    const { event_master, college_master, user_master, department_master, db1Conn } = await getModels();
+    const { event_master, db1Conn } = await getModels();
     console.log(`\n req.body: `, req.body);
     try {
         let list = await event_master.findAll({
-            order: [['registration_start_date', 'ASC']],
+            order: [['event_start_date', 'ASC']],
             where: { status: 1 },
-            attributes: ['event_id', 'event_name', 'event_start_date', 'event_fees', 'event_type', 'user_id'],
-
-            include: [{
-                model: college_master,
-                attributes: ['college_id', 'college_name'],
-            }, {
-                model: user_master,
-                attributes: ['department_id'],
-                include: [{
-                    model: department_master,
-                    attributes: ['department_code'],
-                }]
-            }]
+            attributes: ['event_id', 'event_name'],
         });
 
         if (list) {
@@ -216,20 +204,19 @@ exports.userAdd = async (req, res) => {
         let list = await user_master.findAll({
             where: {
                 user_email: req.body.user_email,
-                user_contact: req.body.user_contact,
+                // user_contact: req.body.user_contact,
             },
         });
         if (list == 0 || list == []) {
             await user_master.create({
+                role_id: 5,
                 college_id: req.body.college_id,
                 department_id: req.body.department_id,
                 user_name: req.body.user_name,
                 user_email: req.body.user_email,
-                user_contact: req.body.user_contact,
                 user_password: req.body.user_password,
+                user_contact: '',
                 status: 1,
-                created_date: today_date,
-                role_id: 5,
             });
             res.json({ status: 1, message: "User Added Successfully.", data: {} });
         }
@@ -239,6 +226,53 @@ exports.userAdd = async (req, res) => {
     }
     catch (error) {
         console.log('\nMasterController.userAdd error', error)
+        throw error;
+    }
+}
+/* ************ User Login ************ */
+exports.userLogin = async (req, res) => {
+    console.log('\nMasterController.userLogin triggered -->');
+
+    const { user_master, db1Conn } = await getModels();
+
+    try {
+        let list = await user_master.findOne({
+            where: {
+                user_email: req.body.user_email,
+                user_password: req.body.user_password,
+            },
+        });
+        if (list == 0 || list == [] || list == null) {
+            res.json({ status: 0, message: "User Doesn't Exists.", data: {} });
+        } else {
+            res.json({ status: 1, message: "User Login Successful!", data: [list] });
+        }
+    }
+    catch (error) {
+        console.log('\nMasterController.userLogin error', error)
+        throw error;
+    }
+}
+/* ************ Forgot Password ************ */
+exports.forgotPassword = async (req, res) => {
+    console.log('\nMasterController.forgotPassword triggered -->');
+
+    const { user_master, db1Conn } = await getModels();
+
+    try {
+        let list = await user_master.findOne({
+            where: {
+                user_email: req.body.user_email,
+            },
+        });
+        if (list == 0 || list == []) {
+            res.json({ status: 0, message: "User Doesn't Exists.", data: {} });
+        } else {
+            res.json({ status: 1, message: "User Login Successful!", data: [list] });
+        }
+    }
+    catch (error) {
+        console.log('\nMasterController.forgotPassword error', error)
         throw error;
     }
 }
@@ -329,16 +363,56 @@ exports.getFavouriteList = async (req, res) => {
         throw error;
     }
 }
-/* ************ Get Event Master List ************ */
-exports.getEventList = async (req, res) => {
-    console.log('\nMasterController.getEventList triggered -->');
+/* ************ Get Active Event List ************ */
+exports.getActiveEventList = async (req, res) => {
+    console.log('\nMasterController.getActiveEventList triggered -->');
     const { event_master, college_master, city_master, state_master, db1Conn } = await getModels();
     console.log(`\n req.body: `, req.body);
+    var today_date = moment(new Date()).format("YYYY/MM/DD");
+
     try {
         let list = await event_master.findAll({
-            order: [['event_date', 'ASC']],
+            order: [['registration_start_date', 'ASC']],
             where: { status: 1 },
-            attributes: ['event_id', 'event_name', 'event_desc', 'event_date', 'event_fees', 'event_type'],
+            attributes: ['event_id', 'event_name', 'event_fees', 'event_type'],
+
+            include: [{
+                model: college_master,
+                attributes: ['college_id', 'college_name'],
+
+                include: [{
+                    model: state_master,
+                    attributes: ['state_id', 'state_name']
+                }, {
+                    model: city_master,
+                    attributes: ['city_id', 'city_name']
+                },]
+            }]
+        });
+
+        if (list) {
+            res.json({ status: 1, message: "Active Event List Found", data: list });
+        } else {
+            res.json({ status: 0, message: "Active Event List not Found!", data: {} });
+        }
+    }
+    catch (error) {
+        console.log('\nMasterController.getActiveEventList error', error)
+        throw error;
+    }
+}
+/* ************ Get Upcoming Event List ************ */
+exports.getUpcomingEventList = async (req, res) => {
+    console.log('\nMasterController.getUpcomingEventList triggered -->');
+    const { event_master, college_master, city_master, state_master, db1Conn } = await getModels();
+    console.log(`\n req.body: `, req.body);
+    var today_date = moment(new Date()).format("YYYY/MM/DD");
+
+    try {
+        let list = await event_master.findAll({
+            order: [['registration_start_date', 'ASC']],
+            where: { status: 1 },
+            attributes: ['event_id', 'event_name', 'event_fees', 'event_type'],
 
             include: [{
                 model: college_master,
@@ -361,7 +435,7 @@ exports.getEventList = async (req, res) => {
         }
     }
     catch (error) {
-        console.log('\nMasterController.getEventList error', error)
+        console.log('\nMasterController.getUpcomingEventList error', error)
         throw error;
     }
 }

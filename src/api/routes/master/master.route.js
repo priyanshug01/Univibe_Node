@@ -12,10 +12,13 @@ const {
     getDepartmentMaster,
     getEventMaster,
     userAdd,
+    userLogin,
+    forgotPassword,
     getUserDetails,
     favouriteAdd,
     getFavouriteList,
-    getEventList,
+    getActiveEventList,
+    getUpcomingEventList,
     bookingAdd,
     reviewAdd,
     reviewView,
@@ -40,10 +43,13 @@ router.post('/api/v1/master/getRoleMaster', catchErrors(getRoleMaster));
 router.post('/api/v1/master/getDepartmentMaster', catchErrors(getDepartmentMaster));
 router.post('/api/v1/master/getEventMaster', catchErrors(getEventMaster));
 router.post('/api/v1/master/userAdd', catchErrors(userAdd));
+router.post('/api/v1/master/userLogin', catchErrors(userLogin));
+router.post('/api/v1/master/forgotPassword', catchErrors(forgotPassword));
 router.post('/api/v1/master/getUserDetails', catchErrors(getUserDetails));
 router.post('/api/v1/master/favouriteAdd', catchErrors(favouriteAdd));
 router.post('/api/v1/master/getFavouriteList', catchErrors(getFavouriteList));
-router.post('/api/v1/master/getEventList', catchErrors(getEventList));
+router.post('/api/v1/master/getActiveEventList', catchErrors(getActiveEventList));
+router.post('/api/v1/master/getUpcomingEventList', catchErrors(getUpcomingEventList));
 router.post('/api/v1/master/bookingAdd', catchErrors(bookingAdd));
 router.post('/api/v1/master/reviewAdd', catchErrors(reviewAdd));
 router.post('/api/v1/master/reviewView', catchErrors(reviewView));
