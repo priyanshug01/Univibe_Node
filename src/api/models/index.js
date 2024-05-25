@@ -56,6 +56,9 @@ async function createDatabases() {
     event_master.hasOne(user_master, { foreignKey: 'user_id', sourceKey: 'user_id' });
 
     favourite_master.hasMany(event_master, { foreignKey: 'event_id', sourceKey: 'event_id' });
+    booking_master.hasMany(event_master, { foreignKey: 'event_id', sourceKey: 'event_id' });
+
+    booking_master.hasMany(college_master, { foreignKey: 'college_id', sourceKey: 'college_id' });
 
     user_master.hasOne(department_master, { foreignKey: 'department_id', sourceKey: 'department_id' });
     user_master.hasOne(college_master, { foreignKey: 'college_id', sourceKey: 'college_id' });
