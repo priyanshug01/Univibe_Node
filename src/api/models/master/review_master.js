@@ -15,7 +15,7 @@ const review_master_schema = {
             type: Sequelize.INTEGER
         },
         review_image: {
-            type: Sequelize.CITEXT
+            type: Sequelize.TEXT
         },
         comment: {
             type: Sequelize.TEXT

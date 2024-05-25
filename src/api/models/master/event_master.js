@@ -17,6 +17,9 @@ const event_master_schema = {
         event_start_date: {
             type: Sequelize.DATEONLY
         },
+        event_start_time: {
+            type: Sequelize.TIME
+        },
         event_end_date: {
             type: Sequelize.DATEONLY
         },
@@ -25,6 +28,9 @@ const event_master_schema = {
         },
         registration_end_date: {
             type: Sequelize.DATEONLY
+        },
+        event_venue: {
+            type: Sequelize.TEXT
         },
         event_image: {
             type: Sequelize.TEXT

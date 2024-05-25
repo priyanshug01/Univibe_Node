@@ -15,17 +15,18 @@ const {
     userLogin,
     forgotPassword,
     getUserDetails,
-    favouriteAdd,
     getFavouriteList,
     getActiveEventList,
     getUpcomingEventList,
     bookingAdd,
     reviewAdd,
-    reviewView,
+    reviewList,
     getUserById,
     eventAdd,
-    favAdd,
-    getfavview,
+    favouriteAdd,
+    getFavouriteEventList,
+    getUserEventHistory,
+    getEventDetail,
 
 } = require('../../controllers').MasterController;
 
@@ -49,14 +50,15 @@ router.post('/api/v1/master/userAdd', catchErrors(userAdd));
 router.post('/api/v1/master/userLogin', catchErrors(userLogin));
 router.post('/api/v1/master/forgotPassword', catchErrors(forgotPassword));
 router.post('/api/v1/master/getUserDetails', catchErrors(getUserDetails));
-router.post('/api/v1/master/favouriteAdd', catchErrors(favouriteAdd));
 router.post('/api/v1/master/getFavouriteList', catchErrors(getFavouriteList));
 router.post('/api/v1/master/getActiveEventList', catchErrors(getActiveEventList));
 router.post('/api/v1/master/getUpcomingEventList', catchErrors(getUpcomingEventList));
 router.post('/api/v1/master/bookingAdd', catchErrors(bookingAdd));
 router.post('/api/v1/master/reviewAdd', catchErrors(reviewAdd));
-router.post('/api/v1/master/reviewView', catchErrors(reviewView));
+router.post('/api/v1/master/reviewList', catchErrors(reviewList));
 router.post('/api/v1/master/getUserById', catchErrors(getUserById));
 router.post('/api/v1/master/eventAdd', catchErrors(eventAdd));
-router.post('/api/v1/master/favAdd', catchErrors(favAdd));
-router.post('/api/v1/master/getfavview', catchErrors(getfavview));
+router.post('/api/v1/master/favouriteAdd', catchErrors(favouriteAdd));
+router.post('/api/v1/master/getFavouriteEventList', catchErrors(getFavouriteEventList));
+router.post('/api/v1/master/getUserEventHistory', catchErrors(getUserEventHistory));
+router.post('/api/v1/master/getEventDetail', catchErrors(getEventDetail));

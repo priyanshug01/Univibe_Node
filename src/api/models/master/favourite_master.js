@@ -17,7 +17,7 @@ const favourite_master_schema = {
         status: {
             type: Sequelize.INTEGER
         },
-        event_date: {
+        event_end_date: {
             type: Sequelize.DATE
         },
     },
