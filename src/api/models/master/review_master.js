@@ -14,6 +14,9 @@ const review_master_schema = {
         user_id: {
             type: Sequelize.INTEGER
         },
+        review_image: {
+            type: Sequelize.CITEXT
+        },
         comment: {
             type: Sequelize.TEXT
         },

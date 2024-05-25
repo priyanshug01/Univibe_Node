@@ -26,6 +26,9 @@ const event_master_schema = {
         registration_end_date: {
             type: Sequelize.DATEONLY
         },
+        event_image: {
+            type: Sequelize.TEXT
+        },
         event_type: {
             type: Sequelize.STRING
         },
