@@ -636,6 +636,10 @@ exports.favouriteAdd = async (req, res) => {
     var today_date = moment(new Date()).format("YYYY/MM/DD");
 
     try {
+        let ev_ex = await favourite_master.findOne({
+            where: { event_id: req.body.event_id,user_id: req.body.user_id, },
+        });
+        if(!ev_ex){
         let event_details = await event_master.findOne({
             where: { event_id: req.body.event_id },
         });
@@ -646,6 +650,16 @@ exports.favouriteAdd = async (req, res) => {
             status: req.body.status,
         });
         res.json({ status: 1, message: "Favourite Added Successfully.", data: {} });
+    }else{
+        await favourite_master.update({
+            status: req.body.status,
+            where:{
+                event_id: req.body.event_id,
+                user_id: req.body.user_id,
+            }
+        });
+        res.json({ status: 1, message: "Favourite Update Successfully.", data: {} });
+    }
     }
     catch (error) {
         console.log('\nMasterController.favouriteAdd error', error)
@@ -737,6 +751,29 @@ exports.getEventDetail = async (req, res) => {
     }
     catch (error) {
         console.log('\nMasterController.getEventDetail error', error)
+        throw error;
+    }
+}
+
+/* ************ Favourite Update ************ */
+exports.favouriteUpdate = async (req, res) => {
+    console.log('\nMasterController.favouriteAdd triggered -->');
+
+    const { favourite_master, event_master, db1Conn } = await getModels();
+    var today_date = moment(new Date()).format("YYYY/MM/DD");
+
+    try {
+        await favourite_master.update({
+            status: req.body.status,
+            where:{
+                event_id: req.body.event_id,
+                user_id: req.body.user_id,
+            }
+        });
+        res.json({ status: 1, message: "Favourite Update Successfully.", data: {} });
+    }
+    catch (error) {
+        console.log('\nMasterController.favouriteAdd error', error)
         throw error;
     }
 }
