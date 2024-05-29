@@ -208,7 +208,7 @@ exports.userAdd = async (req, res) => {
             },
         });
         if (list == 0 || list == []) {
-            await user_master.create({
+         let user_data =  await user_master.create({
                 role_id: 5,
                 college_id: req.body.college_id,
                 department_id: req.body.department_id,
@@ -218,7 +218,7 @@ exports.userAdd = async (req, res) => {
                 user_contact: '',
                 status: 1,
             });
-            res.json({ status: 1, message: "User Added Successfully.", data: {} });
+            res.json({ status: 1, message: "User Added Successfully.", data: user_data });
         }
         else {
             res.json({ status: 0, message: "User Already Exists.", data: {} });
@@ -417,20 +417,27 @@ exports.getUpcomingEventList = async (req, res) => {
 exports.bookingAdd = async (req, res) => {
     console.log('\nMasterController.bookingAdd triggered -->');
 
-    const { booking_master, db1Conn } = await getModels();
+    const { booking_master,user_master, db1Conn } = await getModels();
     var today_date = moment(new Date()).format("YYYY/MM/DD");
 
     try {
+        let user_email = req.body.user_email;
+        let list_email = await user_master.findOne({
+            where: {
+                user_email: user_email,
+            },
+        });
+        if(list_email){
         let list = await booking_master.findAll({
             where: {
                 event_id: req.body.event_id,
-                user_id: req.body.user_id,
+                user_id: list_email.user_id,
             },
         });
         if (list == 0 || list == []) {
             await booking_master.create({
                 team_id: req.body.team_id,
-                user_id: req.body.user_id,
+                user_id: list_email.user_id,
                 event_id: req.body.event_id,
                 college_id: req.body.college_id,
                 status: 1,
@@ -442,6 +449,9 @@ exports.bookingAdd = async (req, res) => {
         else {
             res.json({ status: 0, message: "Booking Already Exists.", data: {} });
         }
+    }else{
+        res.json({ status: 0, message: "Mail Id Not Exists.", data: {} });
+    }
     }
     catch (error) {
         console.log('\nMasterController.bookingAdd error', error)
@@ -463,14 +473,14 @@ exports.teamAdd = async (req, res) => {
             },
         });
         if (list == 0 || list == []) {
-            await team_master.create({
+         let team_data = await team_master.create({
                 college_id: req.body.college_id,
                 event_id: req.body.event_id,
                 user_id: req.body.user_id,
                 team_name: req.body.team_name,
                 status: 1,
             });
-            res.json({ status: 1, message: "Booking Added Successfully.", data: {} });
+            res.json({ status: 1, message: "Booking Added Successfully.", data: team_data.team_id });
         }
         else {
             res.json({ status: 0, message: "Booking Already Exists.", data: {} });
