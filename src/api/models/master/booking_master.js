@@ -23,9 +23,6 @@ const booking_master_schema = {
         booking_date: {
             type: Sequelize.DATE
         },
-        payment_id: {
-            type: Sequelize.INTEGER
-        },
         status: {
             type: Sequelize.INTEGER
         },
