@@ -4,6 +4,7 @@ const { Op } = require('sequelize');
 
 const multer = require('multer');
 const path = require('path');
+const department_master_schema = require('../../models/master/department_master');
 
 // multer file save
 const storage = multer.diskStorage({
@@ -208,7 +209,7 @@ exports.userAdd = async (req, res) => {
             },
         });
         if (list == 0 || list == []) {
-         let user_data =  await user_master.create({
+            let user_data = await user_master.create({
                 role_id: 5,
                 college_id: req.body.college_id,
                 department_id: req.body.department_id,
@@ -417,7 +418,7 @@ exports.getUpcomingEventList = async (req, res) => {
 exports.bookingAdd = async (req, res) => {
     console.log('\nMasterController.bookingAdd triggered -->');
 
-    const { booking_master,user_master, db1Conn } = await getModels();
+    const { booking_master, user_master, db1Conn } = await getModels();
     var today_date = moment(new Date()).format("YYYY/MM/DD");
 
     try {
@@ -427,31 +428,31 @@ exports.bookingAdd = async (req, res) => {
                 user_email: user_email,
             },
         });
-        if(list_email){
-        let list = await booking_master.findAll({
-            where: {
-                event_id: req.body.event_id,
-                user_id: list_email.user_id,
-            },
-        });
-        if (list == 0 || list == []) {
-            await booking_master.create({
-                team_id: req.body.team_id,
-                user_id: list_email.user_id,
-                event_id: req.body.event_id,
-                college_id: req.body.college_id,
-                status: 1,
-                semester: req.body.semester,
-                roll_number: req.body.roll_number,
+        if (list_email) {
+            let list = await booking_master.findAll({
+                where: {
+                    event_id: req.body.event_id,
+                    user_id: list_email.user_id,
+                },
             });
-            res.json({ status: 1, message: "Booking Added Successfully.", data: {} });
+            if (list == 0 || list == []) {
+                await booking_master.create({
+                    team_id: req.body.team_id,
+                    user_id: list_email.user_id,
+                    event_id: req.body.event_id,
+                    college_id: req.body.college_id,
+                    status: 1,
+                    semester: req.body.semester,
+                    roll_number: req.body.roll_number,
+                });
+                res.json({ status: 1, message: "Booking Added Successfully.", data: {} });
+            }
+            else {
+                res.json({ status: 0, message: "Booking Already Exists.", data: {} });
+            }
+        } else {
+            res.json({ status: 0, message: "Mail Id Not Exists.", data: {} });
         }
-        else {
-            res.json({ status: 0, message: "Booking Already Exists.", data: {} });
-        }
-    }else{
-        res.json({ status: 0, message: "Mail Id Not Exists.", data: {} });
-    }
     }
     catch (error) {
         console.log('\nMasterController.bookingAdd error', error)
@@ -473,7 +474,7 @@ exports.teamAdd = async (req, res) => {
             },
         });
         if (list == 0 || list == []) {
-         let team_data = await team_master.create({
+            let team_data = await team_master.create({
                 college_id: req.body.college_id,
                 event_id: req.body.event_id,
                 user_id: req.body.user_id,
@@ -696,6 +697,7 @@ exports.favouriteAdd = async (req, res) => {
         } else {
             await favourite_master.update({
                 status: req.body.status,
+            }, {
                 where: {
                     event_id: req.body.event_id,
                     user_id: req.body.user_id,
@@ -747,14 +749,18 @@ exports.getFavouriteEventList = async (req, res) => {
 /* ************ Get User Event History List ************ */
 exports.getUserEventHistory = async (req, res) => {
     console.log('\nMasterController.getUserEventHistory triggered -->');
-    const { booking_master, event_master, college_master, db1Conn } = await getModels();
+    const { booking_master, event_master, user_master, department_master, db1Conn } = await getModels();
     console.log(`\n req.body: `, req.body);
     try {
         let v_list = await booking_master.findAll({
             include: [{
-                model: event_master
+                model: event_master,
+                attributes: ["event_id", "event_image", "event_type", "event_name"],
             }, {
-                model: college_master
+                model: user_master,
+                include: [{
+                    model: department_master,
+                }],
             }],
             where: {
                 user_id: req.body.user_id
@@ -798,29 +804,6 @@ exports.getEventDetail = async (req, res) => {
     }
 }
 
-/* ************ Favourite Update ************ */
-exports.favouriteUpdate = async (req, res) => {
-    console.log('\nMasterController.favouriteAdd triggered -->');
-
-    const { favourite_master, event_master, db1Conn } = await getModels();
-    var today_date = moment(new Date()).format("YYYY/MM/DD");
-
-    try {
-        await favourite_master.update({
-            status: req.body.status,
-            where: {
-                event_id: req.body.event_id,
-                user_id: req.body.user_id,
-            }
-        });
-        res.json({ status: 1, message: "Favourite Update Successfully.", data: {} });
-    }
-    catch (error) {
-        console.log('\nMasterController.favouriteAdd error', error)
-        throw error;
-    }
-}
-
 /* ************ Booking Update ************ */
 exports.bookingCancel = async (req, res) => {
     console.log('\nMasterController.favouriteAdd triggered -->');
@@ -831,6 +814,7 @@ exports.bookingCancel = async (req, res) => {
     try {
         await booking_master.update({
             status: 0,
+        }, {
             where: {
                 event_id: req.body.event_id,
                 user_id: req.body.user_id,

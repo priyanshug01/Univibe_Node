@@ -18,7 +18,7 @@ const event_master_schema = {
             type: Sequelize.DATEONLY
         },
         event_start_time: {
-            type: Sequelize.TIME
+            type: Sequelize.STRING
         },
         event_end_date: {
             type: Sequelize.DATEONLY
