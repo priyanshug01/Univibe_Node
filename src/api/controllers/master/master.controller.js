@@ -434,7 +434,9 @@ exports.bookingAdd = async (req, res) => {
                 event_id: req.body.event_id,
                 college_id: req.body.college_id,
                 status: 1,
-                booking_date: today_date,
+                semester: req.body.semester,
+                roll_number: req.body.roll_number,
+              //  booking_date: today_date,
             });
             res.json({ status: 1, message: "Booking Added Successfully.", data: {} });
         }

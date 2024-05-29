@@ -29,6 +29,12 @@ const booking_master_schema = {
         status: {
             type: Sequelize.INTEGER
         },
+        roll_number: {
+            type: Sequelize.STRING
+        },
+        semester: {
+            type: Sequelize.INTEGER
+        },
 
     },
     options: {
