@@ -28,6 +28,7 @@ const {
     getFavouriteEventList,
     getUserEventHistory,
     getEventDetail,
+    bookingCancel,
 
 } = require('../../controllers').MasterController;
 
@@ -64,3 +65,4 @@ router.post('/api/v1/master/favouriteAdd', catchErrors(favouriteAdd));
 router.post('/api/v1/master/getFavouriteEventList', catchErrors(getFavouriteEventList));
 router.post('/api/v1/master/getUserEventHistory', catchErrors(getUserEventHistory));
 router.post('/api/v1/master/getEventDetail', catchErrors(getEventDetail));
+router.post('/api/v1/master/bookingCancel', catchErrors(bookingCancel));

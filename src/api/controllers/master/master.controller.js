@@ -820,3 +820,26 @@ exports.favouriteUpdate = async (req, res) => {
         throw error;
     }
 }
+
+/* ************ Booking Update ************ */
+exports.bookingCancel = async (req, res) => {
+    console.log('\nMasterController.favouriteAdd triggered -->');
+
+    const { booking_master, db1Conn } = await getModels();
+    var today_date = moment(new Date()).format("YYYY/MM/DD");
+
+    try {
+        await booking_master.update({
+            status: 0,
+            where: {
+                event_id: req.body.event_id,
+                user_id: req.body.user_id,
+            }
+        });
+        res.json({ status: 1, message: "Booking Cancel Successfully.", data: {} });
+    }
+    catch (error) {
+        console.log('\nMasterController.favouriteAdd error', error)
+        throw error;
+    }
+}
