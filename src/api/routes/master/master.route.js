@@ -19,6 +19,7 @@ const {
     getActiveEventList,
     getUpcomingEventList,
     bookingAdd,
+    teamAdd,
     reviewAdd,
     reviewList,
     getUserById,
@@ -54,6 +55,7 @@ router.post('/api/v1/master/getFavouriteList', catchErrors(getFavouriteList));
 router.post('/api/v1/master/getActiveEventList', catchErrors(getActiveEventList));
 router.post('/api/v1/master/getUpcomingEventList', catchErrors(getUpcomingEventList));
 router.post('/api/v1/master/bookingAdd', catchErrors(bookingAdd));
+router.post('/api/v1/master/teamAdd', catchErrors(teamAdd));
 router.post('/api/v1/master/reviewAdd', catchErrors(reviewAdd));
 router.post('/api/v1/master/reviewList', catchErrors(reviewList));
 router.post('/api/v1/master/getUserById', catchErrors(getUserById));

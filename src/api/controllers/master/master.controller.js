@@ -429,14 +429,13 @@ exports.bookingAdd = async (req, res) => {
         });
         if (list == 0 || list == []) {
             await booking_master.create({
-                team_id: 0,
+                team_id: req.body.team_id,
                 user_id: req.body.user_id,
                 event_id: req.body.event_id,
                 college_id: req.body.college_id,
                 status: 1,
                 semester: req.body.semester,
                 roll_number: req.body.roll_number,
-              //  booking_date: today_date,
             });
             res.json({ status: 1, message: "Booking Added Successfully.", data: {} });
         }
@@ -449,7 +448,39 @@ exports.bookingAdd = async (req, res) => {
         throw error;
     }
 }
+/* ************ User Add ************ */
+exports.teamAdd = async (req, res) => {
+    console.log('\nMasterController.bookingAdd triggered -->');
 
+    const { team_master, db1Conn } = await getModels();
+    var today_date = moment(new Date()).format("YYYY/MM/DD");
+
+    try {
+        let list = await team_master.findAll({
+            where: {
+                event_id: req.body.event_id,
+                user_id: req.body.user_id,
+            },
+        });
+        if (list == 0 || list == []) {
+            await team_master.create({
+                college_id: req.body.college_id,
+                event_id: req.body.event_id,
+                user_id: req.body.user_id,
+                team_name: req.body.team_name,
+                status: 1,
+            });
+            res.json({ status: 1, message: "Booking Added Successfully.", data: {} });
+        }
+        else {
+            res.json({ status: 0, message: "Booking Already Exists.", data: {} });
+        }
+    }
+    catch (error) {
+        console.log('\nMasterController.bookingAdd error', error)
+        throw error;
+    }
+}
 /* ************ Review Add ************ */
 exports.reviewAdd = async (req, res) => {
     const { review_master, db1Conn } = await getModels();
@@ -639,29 +670,29 @@ exports.favouriteAdd = async (req, res) => {
 
     try {
         let ev_ex = await favourite_master.findOne({
-            where: { event_id: req.body.event_id,user_id: req.body.user_id, },
+            where: { event_id: req.body.event_id, user_id: req.body.user_id, },
         });
-        if(!ev_ex){
-        let event_details = await event_master.findOne({
-            where: { event_id: req.body.event_id },
-        });
-        await favourite_master.create({
-            event_id: req.body.event_id,
-            user_id: req.body.user_id,
-            event_end_date: event_details.event_end_date,
-            status: req.body.status,
-        });
-        res.json({ status: 1, message: "Favourite Added Successfully.", data: {} });
-    }else{
-        await favourite_master.update({
-            status: req.body.status,
-            where:{
+        if (!ev_ex) {
+            let event_details = await event_master.findOne({
+                where: { event_id: req.body.event_id },
+            });
+            await favourite_master.create({
                 event_id: req.body.event_id,
                 user_id: req.body.user_id,
-            }
-        });
-        res.json({ status: 1, message: "Favourite Update Successfully.", data: {} });
-    }
+                event_end_date: event_details.event_end_date,
+                status: req.body.status,
+            });
+            res.json({ status: 1, message: "Favourite Added Successfully.", data: {} });
+        } else {
+            await favourite_master.update({
+                status: req.body.status,
+                where: {
+                    event_id: req.body.event_id,
+                    user_id: req.body.user_id,
+                }
+            });
+            res.json({ status: 1, message: "Favourite Update Successfully.", data: {} });
+        }
     }
     catch (error) {
         console.log('\nMasterController.favouriteAdd error', error)
@@ -767,7 +798,7 @@ exports.favouriteUpdate = async (req, res) => {
     try {
         await favourite_master.update({
             status: req.body.status,
-            where:{
+            where: {
                 event_id: req.body.event_id,
                 user_id: req.body.user_id,
             }

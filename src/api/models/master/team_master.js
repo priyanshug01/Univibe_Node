@@ -3,7 +3,7 @@ const Sequelize = require("sequelize");
 const team_master_schema = {
     schema: {
         // attributes
-        user_id: {
+        team_id: {
             type: Sequelize.INTEGER,
             primaryKey: true,
             autoIncrement: true
@@ -11,11 +11,14 @@ const team_master_schema = {
         college_id: {
             type: Sequelize.INTEGER
         },
+        event_id: {
+            type: Sequelize.INTEGER
+        },
+        user_id: {
+            type: Sequelize.INTEGER
+        },
         team_name: {
             type: Sequelize.STRING
-        },
-        created_by: {
-            type: Sequelize.INTEGER
         },
         created_date: {
             type: Sequelize.DATE
